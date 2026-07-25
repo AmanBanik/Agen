@@ -1,0 +1,7 @@
+{
+  "servers": [
+    "filesystem",
+    "motherduck",
+    "sequential_thinking"
+  ]
+}

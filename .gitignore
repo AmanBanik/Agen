@@ -1,0 +1,27 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python Cache & Packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.spec
+*.iss
+
+# Agent Runtime Memory & Temp files
+.agent_sessions/
+.agent_tmp.py
+*.log
+
+# OS & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumps.db
