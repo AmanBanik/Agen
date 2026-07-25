@@ -47,7 +47,7 @@ We provide two official deployment methods for Windows 64-bit systems:
 ### Method 1: PowerShell One-Liner Web Installer (`irm | iex`)
 Ideal for rapid developer setup and CI/CD pipelines. Open PowerShell and execute:
 ```powershell
-irm https://raw.githubusercontent.com/<user>/agentic/main/deploy/install.ps1 | iex
+irm https://raw.githubusercontent.com/AmanBanik/Agen/main/deploy/install.ps1 | iex
 ```
 *Creates an isolated environment in `%USERPROFILE%\.local\share\TerminalAgent`, installs all dependencies, and registers global `agen` / `agent` commands in your PATH.*
 

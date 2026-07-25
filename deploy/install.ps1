@@ -4,7 +4,7 @@
 .DESCRIPTION
     One-liner installer for Google Antigravity Terminal Agent on Windows x64.
     Usage:
-        irm https://raw.githubusercontent.com/<user>/agentic/main/deploy/install.ps1 | iex
+        irm https://raw.githubusercontent.com/AmanBanik/Agen/main/deploy/install.ps1 | iex
 #>
 
 $ErrorActionPreference = "Stop"
@@ -47,8 +47,7 @@ if (Test-Path ".\pyproject.toml") {
     Copy-Item -Path ".\*" -Destination $installDir -Recurse -Force -Exclude "venv",".git",".agent_sessions",".agent_skills"
 } else {
     Write-Host "  -> Downloading latest release for Windows x64..." -ForegroundColor Green
-    # In production, replace with actual GitHub repo clone/download
-    # git clone https://github.com/your-org/terminal-agent.git $installDir
+    git clone https://github.com/AmanBanik/Agen.git $installDir
 }
 
 # 4. Create Virtual Environment & Install Package

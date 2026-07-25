@@ -10,7 +10,7 @@ Designed for rapid developers and CI/CD environments. This installer pulls the l
 ### Usage:
 Run the following command in any PowerShell (Administrator or standard user) window:
 ```powershell
-irm https://raw.githubusercontent.com/<user>/agentic/main/deploy/install.ps1 | iex
+irm https://raw.githubusercontent.com/AmanBanik/Agen/main/deploy/install.ps1 | iex
 ```
 
 ### What It Does:
