@@ -59,10 +59,39 @@ Ideal for enterprise workstations and offline distribution.
 
 ---
 
+## 🔑 Authentication & LLM Provider Configuration
+
+Terminal Agent supports **Dual-Engine LLM Routing**, allowing you to seamlessly switch between Google Gemini (Cloud) and Ollama (Local/Offline) at any time!
+
+### 1️⃣ Setting Your Google Gemini API Key (Cloud Mode)
+To use cloud-based models (`gemini-3.5-flash` and `gemini-3.1-flash-lite`), simply save your API key once from the terminal:
+```powershell
+# Save your API key globally (stored in ~/.agent_env and backend/.env)
+agen key AIzaSyYourActualGeminiApiKeyHere
+```
+*You can also set `GEMINI_API_KEY` as a Windows environment variable.*
+
+### 2️⃣ Switching to Local Offline Models (Ollama Mode - 100% Free & Private)
+Don't have an API key, or working on sensitive internal datasets? Switch instantly to local models running on Ollama over port `11434`:
+```powershell
+# 1. Ensure Ollama is running, then pull your desired model
+ollama run gemma:7b
+
+# 2. Tell Terminal Agent to use your local model as default
+agen local use gemma:7b
+
+# 3. Check current LLM status
+agen local status
+```
+*To switch back to Gemini Cloud Mode at any time, run: `agen local cloud` or `agen local reset`. You can also toggle providers inside the interactive REPL using `/local gemma:7b` or `/gemini`.*
+
+---
+
 ## 📖 Command Cheat Sheet
 
 | Command | Description | Example |
 | :--- | :--- | :--- |
+| `agen key` | Save Google Gemini API key globally for Cloud Mode | `agen key AIzaSy...` |
 | `agen init` | Initialize `.agent_skills/` or install skill profiles | `agen init --profile ds` or `agen init --all` |
 | `agen chat` | Open REPL or send a prompt (supports `@file` syntax) | `agen chat "Explain CUDA cores" --tough` |
 | `agen exec` | Generate and execute Python code locally in sandbox | `agen exec "Plot an IQR boxplot for df.csv"` |

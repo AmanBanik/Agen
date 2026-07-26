@@ -16,17 +16,24 @@ from typing import Optional
 
 env_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path=env_path)
+home_env = os.path.expanduser("~/.agent_env")
+if os.path.exists(home_env):
+    load_dotenv(dotenv_path=home_env)
 
 app = FastAPI(title="Terminal Agent Backend")
 
-# Initialize models
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise ValueError("GEMINI_API_KEY is missing in .env")
-
-# Using the available model strings
-llm_tough = ChatGoogleGenerativeAI(model="gemini-3.5-flash", api_key=api_key)
-llm_light = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", api_key=api_key)
+def get_gemini_llm(model_name: str):
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        if os.path.exists(home_env):
+            load_dotenv(dotenv_path=home_env)
+            api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key and os.path.exists(".env"):
+            load_dotenv(dotenv_path=".env")
+            api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not configured! Run `agen key <YOUR_API_KEY>` in your terminal, or switch to offline mode with `/local gemma:7b`!")
+    return ChatGoogleGenerativeAI(model=model_name, api_key=api_key)
 
 class ChatRequest(BaseModel):
     prompt: str
@@ -80,8 +87,6 @@ class ChatResponse(BaseModel):
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(req: ChatRequest):
     try:
-        llm = llm_tough if req.task_type == "tough" else llm_light
-        
         messages = []
         full_context = req.system_context + format_mcp_context(req.mcp_servers)
         if full_context.strip():
@@ -99,6 +104,8 @@ async def chat_endpoint(req: ChatRequest):
         if req.provider in ("ollama", "local"):
             content = await call_local_llm(messages, model=req.model)
         else:
+            model_str = "gemini-3.5-flash" if req.task_type == "tough" else "gemini-3.1-flash-lite"
+            llm = get_gemini_llm(model_str)
             response = llm.invoke(messages)
             content = response.content
             if isinstance(content, list):
@@ -156,7 +163,8 @@ async def exec_endpoint(req: ExecRequest):
         if req.provider in ("ollama", "local"):
             content = await call_local_llm(messages, model=req.model)
         else:
-            response = llm_tough.invoke(messages)
+            llm = get_gemini_llm("gemini-3.5-flash")
+            response = llm.invoke(messages)
             content = response.content
             if isinstance(content, list):
                 content = "".join([item.get("text", "") for item in content if isinstance(item, dict) and item.get("type") == "text"])
@@ -196,7 +204,8 @@ async def vision_endpoint(req: VisionRequest):
         if req.provider in ("ollama", "local"):
             content = await call_local_llm(messages, model=req.model)
         else:
-            response = llm_tough.invoke(messages)
+            llm = get_gemini_llm("gemini-3.5-flash")
+            response = llm.invoke(messages)
             content = response.content
             if isinstance(content, list):
                 content = "".join([item.get("text", "") for item in content if isinstance(item, dict) and item.get("type") == "text"])

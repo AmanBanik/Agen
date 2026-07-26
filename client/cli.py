@@ -546,6 +546,27 @@ def vision(
         except Exception as e:
             console.print(f"[error]Vision analysis failed: {e}[/error]")
 
+@app.command("key")
+def set_api_key(api_key: str = typer.Argument(..., help="Your Google Gemini API Key (e.g. AIzaSy...)")):
+    """Set and save your Google Gemini API key"""
+    env_path = os.path.join(os.path.dirname(__file__), "..", "backend", ".env")
+    home_env = os.path.expanduser("~/.agent_env")
+    
+    try:
+        with open(home_env, "w", encoding="utf-8") as f:
+            f.write(f"GEMINI_API_KEY={api_key}\n")
+    except Exception:
+        pass
+        
+    try:
+        os.makedirs(os.path.dirname(env_path), exist_ok=True)
+        with open(env_path, "w", encoding="utf-8") as f:
+            f.write(f"GEMINI_API_KEY={api_key}\n")
+    except Exception:
+        pass
+        
+    console.print("[info]Google Gemini API Key saved successfully![/info] [bold green]Ready for Cloud Mode![/bold green]")
+
 def main():
     app()
 
