@@ -1,0 +1,19 @@
+# PyInstaller and builds
+build/
+dist/
+*.spec
+*.egg-info/
+__pycache__/
+*.pyc
+
+# Virtual Environments
+venv/
+env/
+.env
+
+# ChromaDB Semantic Memory
+.chromadb/
+
+# OS Files
+.DS_Store
+Thumbs.db
