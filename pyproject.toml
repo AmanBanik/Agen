@@ -20,7 +20,8 @@ dependencies = [
     "chromadb>=0.4.0",
     "langchain-community>=0.2.0",
     "mcp>=1.0.0",
-    "pylatexenc>=2.10"
+    "pylatexenc>=2.10",
+    "prompt_toolkit>=3.0.0"
 ]
 
 [project.scripts]
