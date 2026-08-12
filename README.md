@@ -10,7 +10,7 @@
 
 Agen is a terminal-native, highly capable autonomous AI coding assistant. It uses a LangChain ReAct loop under the hood to write code, execute commands, run tools natively on your machine, and spawn swarm agents to complete complex software engineering tasks.
 
-[View Releases](#-installation) • [Report Bug](https://github.com/AmanBanik/Agen/issues) • [Request Feature](https://github.com/AmanBanik/Agen/issues)
+[View Releases](https://github.com/AmanBanik/Agen/releases) • [Report Bug](https://github.com/AmanBanik/Agen/issues) • [Request Feature](https://github.com/AmanBanik/Agen/issues)
 
 </div>
 
@@ -18,11 +18,11 @@ Agen is a terminal-native, highly capable autonomous AI coding assistant. It use
 
 ## ✨ Key Features
 
-* 🧠 **Multi-Agent Swarm Architecture:** Agen can use the \invoke_subagent\ tool to spawn independent, asynchronous clones of itself in the background to handle multi-tasking (e.g., monitoring a server while simultaneously writing a frontend).
-* 🖥️ **Interactive REPL UI:** Built with \prompt_toolkit\ and \ich\. Includes native \/\ commands and intelligent \@\ file/folder attachment parsing without relying on slow shell commands.
+* 🧠 **Multi-Agent Swarm Architecture:** Agen can use the `invoke_subagent` tool to spawn independent, asynchronous clones of itself in the background to handle multi-tasking (e.g., monitoring a server while simultaneously writing a frontend).
+* 🖥️ **Interactive REPL UI:** Built with `prompt_toolkit` and `rich`. Includes native `/` commands and intelligent `@` file/folder attachment parsing without relying on slow shell commands.
 * 🔌 **Model Context Protocol (MCP):** Connects to any standard MCP server (Tavily, GitHub, Puppeteer, Postgres, Docker) to dynamically load new tool capabilities on the fly.
-* 📚 **RAG Semantic Memory:** Use the \/index\ command to chunk and embed your entire codebase into a local ChromaDB vector database. The agent will automatically recall relevant snippets from your codebase during conversations!
-* ☁️ **Multi-Provider Support:** Switch between Cloud mode (Google Gemini) and Local execution mode (Ollama Llama3/Gemma) instantly via \/gemini\ or \/ollama\ commands.
+* 📚 **RAG Semantic Memory:** Use the `/index` command to chunk and embed your entire codebase into a local ChromaDB vector database. The agent will automatically recall relevant snippets from your codebase during conversations!
+* ☁️ **Multi-Provider Support:** Switch between Cloud mode (Google Gemini) and Local execution mode (Ollama Llama3/Gemma) instantly via `/gemini` or `/ollama` commands.
 
 ---
 
@@ -32,14 +32,14 @@ Agen is a terminal-native, highly capable autonomous AI coding assistant. It use
 You do not need Python installed. Download and run the standalone binary directly from GitHub.
 
 **Via PowerShell (Fastest):**
-\\\powershell
+```powershell
 irm https://github.com/AmanBanik/Agen/releases/download/v2.0.0/agen.exe -OutFile agen.exe
 .\agen.exe
-\\\
+```
 
 **Via Browser:**
 1. Go to the [Releases Page](https://github.com/AmanBanik/Agen/releases/latest).
-2. Download \gen.exe\.
+2. Download `agen.exe`.
 3. Double-click to run!
 
 ---
@@ -47,7 +47,7 @@ irm https://github.com/AmanBanik/Agen/releases/download/v2.0.0/agen.exe -OutFile
 ### Option 2: Build from Source (Global CLI)
 For developers who want to run the python source code natively across Linux, macOS, or Windows.
 
-\\\ash
+```bash
 # 1. Clone the repository
 git clone https://github.com/AmanBanik/Agen.git
 cd Agen
@@ -59,38 +59,38 @@ setup.bat
 # For macOS / Linux:
 chmod +x install.sh
 ./install.sh
-\\\
-*This installs Agen globally via pip. You can now launch it anywhere by typing \gen\ in your terminal.*
+```
+*This installs Agen globally via pip. You can now launch it anywhere by typing `agen` in your terminal.*
 
 ---
 
 ## 🛠️ Usage & Commands
 
-Simply type \gen\ (or run \gen.exe\) in your terminal to boot up the interactive UI.
+Simply type `agen` (or run `agen.exe`) in your terminal to boot up the interactive UI.
 
 ### In-Chat Commands
-* \/help\ - Show the interactive help menu.
-* \/index <dir>\ - Generate vector embeddings of your project for semantic memory.
-* \/skill pull <github_url>\ - Clone a community AI workflow skill into your local \.agent_skills\ directory.
-* \/ollama\ - Switch the agent to use local hardware via Ollama.
-* \/gemini\ - Switch the agent to use cloud APIs.
-* \/clear\ - Clear the terminal interface.
-* \/exit\ - Quit the CLI.
+* `/help` - Show the interactive help menu.
+* `/index <dir>` - Generate vector embeddings of your project for semantic memory.
+* `/skill pull <github_url>` - Clone a community AI workflow skill into your local `.agent_skills` directory.
+* `/ollama` - Switch the agent to use local hardware via Ollama.
+* `/gemini` - Switch the agent to use cloud APIs.
+* `/clear` - Clear the terminal interface.
+* `/exit` - Quit the CLI.
 
 ### File Attachments
-Use the \@\ symbol anywhere in your prompt to attach files or entire directories instantly.
-> \gen> Can you refactor the code inside @backend/agent.py ?\
+Use the `@` symbol anywhere in your prompt to attach files or entire directories instantly.
+> `agen> Can you refactor the code inside @backend/agent.py ?`
 
 ---
 
 ## ⚙️ Configuration
 If you are using Cloud Mode (Gemini), make sure you set your API key before chatting:
-\\\ash
+```bash
 agen key "YOUR_GEMINI_API_KEY"
-\\\
+```
 
 ## 🤝 Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
-This repository comes packed with a GitHub Actions CI pipeline that automatically tests the backend Swarm orchestration engine and verifies that the \gen.exe\ PyInstaller build succeeds on every PR. 
+This repository comes packed with a GitHub Actions CI pipeline that automatically tests the backend Swarm orchestration engine and verifies that the `agen.exe` PyInstaller build succeeds on every PR. 
 
 Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
