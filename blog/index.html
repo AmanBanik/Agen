@@ -3,8 +3,34 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Agen V2 — The AI Swarm Architecture</title>
+<title>Agen V2 — Building a Swarm AI Architecture</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Extra styles for expanded code blocks and deep-dives */
+  .code-block {
+    background: #111216;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 2rem 0;
+  }
+  .code-block .keyword { color: var(--orange); }
+  .code-block .string { color: var(--teal); }
+  .code-block .comment { color: var(--mid-text); font-style: italic; }
+  .code-block .func { color: var(--amber); }
+
+  .deep-dive {
+    border-left: 3px solid var(--teal);
+    background: rgba(77, 182, 172, 0.05);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+</style>
 </head>
 <body>
 
@@ -15,7 +41,7 @@
     The <span class="highlight">Agen V2</span> Journey
   </h1>
   <p class="header-sub">
-    How we went from a fragile python script to a 60MB standalone executable running asynchronous AI subagents in the terminal.
+    How we went from a fragile python script to a 60MB standalone executable running asynchronous AI subagents natively in the terminal.
   </p>
 </header>
 
@@ -23,112 +49,174 @@
   <div class="nav-inner">
     <a href="#" class="nav-logo">AGEN.V2</a>
     <ul class="nav-links">
-      <li><a href="#background">V1 Limits</a></li>
-      <li><a href="#react">ReAct Loop</a></li>
-      <li><a href="#swarm">Swarm Engine</a></li>
-      <li><a href="#deployment">Deployment</a></li>
+      <li><a href="#v1-limits">V1 Limits</a></li>
+      <li><a href="#react">The ReAct Loop</a></li>
+      <li><a href="#swarm">Swarm Architecture</a></li>
+      <li><a href="#mcp">MCP & RAG</a></li>
+      <li><a href="#packaging">Packaging</a></li>
     </ul>
   </div>
 </nav>
 
 <main>
-  <section id="background">
+  <!-- SECTION 1: V1 LIMITS -->
+  <section id="v1-limits">
     <div class="section-label">01 — The Catalyst</div>
     <h2>Where It All Began:<br>The Limits of V1</h2>
+    
     <p>
-      The initial prototype of Agen was a monolithic python script. It was powerful, but fundamentally flawed. It relied heavily on synchronous polling and brittle shell commands.
+      The initial prototype of Agen was a monolithic python script. It was powerful and proved that a terminal-based AI assistant was viable, but it was fundamentally flawed. It relied heavily on synchronous polling and brittle shell commands. When you asked the agent to parse a directory, it literally executed <code>cat</code> and <code>grep</code> commands in the background, waiting for standard output.
     </p>
+
     <div class="pull-quote">
       <p>We hit a wall. When you are bound by a 4-request-per-minute API limit, synchronous polling is a death sentence.</p>
     </div>
+
+    <p>
+      Using free-tier cloud models like Gemini imposes strict rate limits. Our V1 agent would enter a loop, repeatedly querying the API to check the status of a long-running terminal command. Within 60 seconds, the API would return a <code>429 Too Many Requests</code>, completely crashing the application. The blocking UI meant that while the agent was "thinking", the user was entirely locked out of the terminal.
+    </p>
     
     <div class="diagram-wrap">
       <div class="diagram-title">📅 Project Evolution</div>
       <div class="timeline">
         <div class="timeline-item">
           <div class="tl-year">V1 Prototype</div>
-          <div class="tl-text">Basic CLI wrapper around Gemini. Very slow, blocking UI.</div>
+          <div class="tl-text">Basic CLI wrapper around Gemini. Very slow, blocking UI. Dependent on raw bash scripts for context.</div>
         </div>
         <div class="timeline-item danger">
           <div class="tl-year">The API Bottleneck</div>
-          <div class="tl-text">Frequent crashes due to 429 Too Many Requests when polling for long tasks.</div>
+          <div class="tl-text">Frequent crashes due to 429 Too Many Requests when polling for long tasks. Context windows overflowing with useless logs.</div>
         </div>
         <div class="timeline-item">
           <div class="tl-year">The V2 Rewrite</div>
-          <div class="tl-text">Transitioning to SSE streams and asynchronous architecture.</div>
+          <div class="tl-text">Transitioning to SSE (Server-Sent Events) streams, asynchronous Swarm architecture, and formal tool bindings.</div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- SECTION 2: REACT LOOP -->
   <section id="react">
     <div class="section-label">02 — The Logic</div>
     <h2>The ReAct Engine</h2>
     <p>
-      We tore down the basic chat loop and implemented a rigorous LangChain ReAct (Reason + Act) loop. The agent was no longer just responding; it was <em>thinking</em> and executing physical tools on the host machine.
+      To fix the brittleness of V1, we tore down the basic chat loop and implemented a rigorous <strong>LangChain ReAct (Reason + Act)</strong> loop. The agent was no longer just generating a text response; it was <em>thinking</em> about the problem, creating a plan, and executing physical Python tools on the host machine.
     </p>
+
+    <div class="deep-dive">
+      <h3 style="margin-top: 0; font-size: 1.3rem; border: none;">🧠 How ReAct Changes Everything</h3>
+      <p style="font-size: 1rem;">
+        Instead of asking the LLM to write code and hoping for the best, the ReAct loop forces the model to output a specific JSON schema indicating a <strong>Tool Call</strong>. The Python backend intercepts this, executes the native Python function (e.g., <code>read_file</code> or <code>search_web</code>), and feeds the exact result back into the prompt. The LLM then "Reasons" about the output before taking its next "Action".
+      </p>
+    </div>
     
     <div class="diagram-wrap">
       <div class="diagram-title">⚙️ ReAct Execution Pipeline</div>
       <div style="display:flex; align-items:center; gap:0.5rem; overflow-x:auto; padding-bottom:1rem;">
-        <div class="pipe-block cream" style="min-width:140px;">User Prompt<br><span style="font-size:0.65rem;">"Fix this bug"</span></div>
+        <div class="pipe-block cream" style="min-width:140px; text-align:center;">User Prompt<br><span style="font-size:0.65rem;">"Fix this bug"</span></div>
         <div class="pipe-arrow">→</div>
-        <div class="pipe-block orange" style="min-width:140px;">ReAct Engine<br><span style="font-size:0.65rem;">Plans steps</span></div>
+        <div class="pipe-block orange" style="min-width:140px; text-align:center;">ReAct Engine<br><span style="font-size:0.65rem;">Observes & Plans</span></div>
         <div class="pipe-arrow">→</div>
-        <div class="pipe-block teal" style="min-width:140px;">MCP Tooling<br><span style="font-size:0.65rem;">Reads files, Greps</span></div>
+        <div class="pipe-block teal" style="min-width:140px; text-align:center;">MCP Tooling<br><span style="font-size:0.65rem;">Reads files, Greps</span></div>
         <div class="pipe-arrow">→</div>
-        <div class="pipe-block cream" style="min-width:140px;">Resolution<br><span style="font-size:0.65rem;">Writes fixed code</span></div>
+        <div class="pipe-block cream" style="min-width:140px; text-align:center;">Resolution<br><span style="font-size:0.65rem;">Writes fixed code</span></div>
       </div>
     </div>
   </section>
 
+  <!-- SECTION 3: SWARM ARCHITECTURE -->
   <section id="swarm">
     <div class="section-label">03 — The Breakthrough</div>
     <h2>The Swarm Architecture</h2>
     <p>
-      The crowning achievement of V2. By utilizing Python's <code>asyncio.Task</code>, we gave Agen the ability to call the <code>invoke_subagent</code> tool.
+      The crowning achievement of V2 is the Multi-Agent Swarm. As projects grew larger, a single agent could not maintain the context of a frontend React component, a backend FastAPI server, and a PostgreSQL database simultaneously.
     </p>
     <p>
-      The main agent can now spawn fully independent clones of itself to work on tasks in the background. It doesn't block the UI, and it doesn't poll. It operates purely on asynchronous event loops.
+      By utilizing Python's <code>asyncio.Task</code>, we gave Agen the ability to call the <code>invoke_subagent</code> tool. The main Agent acts as a Manager. When it faces a complex task, it spawns a fully independent, asynchronous clone of itself, passes it a specific prompt, and sends it to the background.
+    </p>
+
+    <div class="code-block">
+<span class="keyword">async def</span> <span class="func">spawn_agent</span>(agent_id, instruction):
+    <span class="comment"># Creates an isolated background task</span>
+    queue = asyncio.Queue()
+    task = asyncio.create_task(
+        run_autonomous_agent(is_subagent=<span class="keyword">True</span>, prompt=instruction)
+    )
+    swarm_registry[agent_id] = task
+    <span class="keyword">return</span> <span class="string">f"Agent {agent_id} spawned successfully."</span>
+    </div>
+
+    <p>
+      Because these subagents operate entirely on asynchronous event loops, they don't block the UI, and they don't rely on while-loop polling. This elegant orchestration allows you to have one agent writing unit tests while another is actively monitoring the server logs—all seamlessly feeding data back to the Manager.
     </p>
 
     <div class="card-grid">
       <div class="card">
         <span class="card-icon">🧠</span>
         <h4>Agent Manager</h4>
-        <p>Oversees the swarm, delegating tasks and merging the results back into the main conversation.</p>
+        <p>Oversees the swarm, delegating tasks and merging the asynchronous results back into the main terminal conversation.</p>
       </div>
       <div class="card">
         <span class="card-icon">⚡</span>
         <h4>Async Tasks</h4>
-        <p>Background workers that handle heavy workloads like semantic RAG chunking without freezing the terminal.</p>
+        <p>Background workers that handle heavy workloads like semantic RAG chunking or web scraping without freezing the terminal UI.</p>
       </div>
       <div class="card">
-        <span class="card-icon">🔌</span>
-        <h4>MCP Integration</h4>
-        <p>Dynamic tool loading through the Model Context Protocol, allowing subagents to spin up local servers.</p>
+        <span class="card-icon">📡</span>
+        <h4>SSE Streams</h4>
+        <p>Server-Sent Events ensure that even when 3 agents are running, API limits are respected by dynamically throttling token generation.</p>
       </div>
     </div>
   </section>
 
-  <section id="deployment">
-    <div class="section-label">04 — Deployment</div>
+  <!-- SECTION 4: MCP & RAG -->
+  <section id="mcp">
+    <div class="section-label">04 — Expanding the Brain</div>
+    <h2>MCP & Semantic RAG</h2>
+    <p>
+      A smart agent is useless if it can't see your code. In V1, we relied on crude string matching. In V2, we integrated a full <strong>Local ChromaDB</strong> vector database.
+    </p>
+    <p>
+      By running the <code>/index</code> command, Agen recursively parses your entire directory, generates semantic embeddings using the local model, and stores them in ChromaDB. When you ask a question, the agent performs a similarity search, instantly retrieving the exact lines of code across hundreds of files without overflowing the LLM context window.
+    </p>
+
+    <div class="deep-dive">
+      <h3 style="margin-top: 0; font-size: 1.3rem; border: none;">🔌 The Model Context Protocol (MCP)</h3>
+      <p style="font-size: 1rem;">
+        Instead of hardcoding every possible tool (like a web scraper or a GitHub API client), we adopted the open-source MCP standard. Agen V2 can dynamically connect to external MCP servers. If the agent realizes it needs to search the web, it connects to a local Tavily MCP server, fetches the search schema, and executes the tool entirely on the fly.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 5: PACKAGING -->
+  <section id="packaging">
+    <div class="section-label">05 — Deployment</div>
     <h2>The PyInstaller Crucible</h2>
     <p>
-      Packaging a massive AI stack (FastAPI, Langchain, Uvicorn, ChromaDB) into a single executable is notoriously difficult. But after navigating hidden imports and module hooks, we succeeded.
+      Writing the software was only half the battle. Packaging a massive modern AI stack—FastAPI, Langchain, Uvicorn, ChromaDB, Rich, and Prompt Toolkit—into a single, distributable Windows executable is notoriously difficult.
     </p>
+    <p>
+      PyInstaller struggles with dynamic imports used by AI libraries. We had to manually trace hidden imports for <code>pylatexenc</code>, configure hook paths for <code>langchain-community</code>, and exclude unnecessary UI frameworks like Tkinter to keep the file size down.
+    </p>
+
     <div class="diagram-wrap">
       <div class="diagram-title">🖥️ Terminal Log: agen.exe Build</div>
       <code style="display:block; padding:1rem; background:rgba(0,0,0,0.5); color:var(--cream); line-height:1.8;">
         > pyinstaller --name "agen" --onefile client/cli.py<br>
+        <span style="color:var(--mid-text);">INFO: Analyzing hidden imports...</span><br>
         <span style="color:var(--mid-text);">INFO: Building PKG (CArchive) agen.pkg completed successfully.</span><br>
         <span style="color:var(--mid-text);">INFO: Bootloader Windows-64bit-intel/run.exe</span><br>
         <span style="color:var(--teal);">INFO: Build complete! The results are available in: dist/agen.exe</span>
       </code>
     </div>
+
     <div class="pull-quote">
-      <p>60MB. One file. Zero dependencies required on the host machine.</p>
+      <p>60MB. One single file. Zero dependencies required on the host machine.</p>
     </div>
+
+    <p>
+      The result is a completely standalone <code>agen.exe</code> binary. A user can download this single file onto a fresh Windows machine that doesn't even have Python installed, double-click it, and instantly have access to a Swarm-capable autonomous AI engineer in their terminal.
+    </p>
   </section>
 </main>
 
