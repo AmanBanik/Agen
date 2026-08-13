@@ -1,15 +1,6 @@
 <div align="center">
 
-```text
-      ▄▄████▄▄      
-    ▄██████████▄    
-   ████▀▀  ▀▀████   
-  ████        ████  
- ██████████████████ 
-█████▀▀▀▀▀▀▀▀▀▀█████
-████            ████
-███              ███
-```
+<img src="logo.svg" alt="Agen V2 Logo" width="400" />
 
 # 🚀 Agen V2
 **The Autonomous AI Engineering CLI**
