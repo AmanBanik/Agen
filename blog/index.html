@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agen V2 — The AI Swarm Architecture</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-bg"></div>
+  <div class="header-ticker">⚙️ BUILD_STATUS: SUCCESS</div>
+  <h1>
+    The <span class="highlight">Agen V2</span> Journey
+  </h1>
+  <p class="header-sub">
+    How we went from a fragile python script to a 60MB standalone executable running asynchronous AI subagents in the terminal.
+  </p>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">AGEN.V2</a>
+    <ul class="nav-links">
+      <li><a href="#background">V1 Limits</a></li>
+      <li><a href="#react">ReAct Loop</a></li>
+      <li><a href="#swarm">Swarm Engine</a></li>
+      <li><a href="#deployment">Deployment</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <section id="background">
+    <div class="section-label">01 — The Catalyst</div>
+    <h2>Where It All Began:<br>The Limits of V1</h2>
+    <p>
+      The initial prototype of Agen was a monolithic python script. It was powerful, but fundamentally flawed. It relied heavily on synchronous polling and brittle shell commands.
+    </p>
+    <div class="pull-quote">
+      <p>We hit a wall. When you are bound by a 4-request-per-minute API limit, synchronous polling is a death sentence.</p>
+    </div>
+    
+    <div class="diagram-wrap">
+      <div class="diagram-title">📅 Project Evolution</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-year">V1 Prototype</div>
+          <div class="tl-text">Basic CLI wrapper around Gemini. Very slow, blocking UI.</div>
+        </div>
+        <div class="timeline-item danger">
+          <div class="tl-year">The API Bottleneck</div>
+          <div class="tl-text">Frequent crashes due to 429 Too Many Requests when polling for long tasks.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-year">The V2 Rewrite</div>
+          <div class="tl-text">Transitioning to SSE streams and asynchronous architecture.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="react">
+    <div class="section-label">02 — The Logic</div>
+    <h2>The ReAct Engine</h2>
+    <p>
+      We tore down the basic chat loop and implemented a rigorous LangChain ReAct (Reason + Act) loop. The agent was no longer just responding; it was <em>thinking</em> and executing physical tools on the host machine.
+    </p>
+    
+    <div class="diagram-wrap">
+      <div class="diagram-title">⚙️ ReAct Execution Pipeline</div>
+      <div style="display:flex; align-items:center; gap:0.5rem; overflow-x:auto; padding-bottom:1rem;">
+        <div class="pipe-block cream" style="min-width:140px;">User Prompt<br><span style="font-size:0.65rem;">"Fix this bug"</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-block orange" style="min-width:140px;">ReAct Engine<br><span style="font-size:0.65rem;">Plans steps</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-block teal" style="min-width:140px;">MCP Tooling<br><span style="font-size:0.65rem;">Reads files, Greps</span></div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-block cream" style="min-width:140px;">Resolution<br><span style="font-size:0.65rem;">Writes fixed code</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="swarm">
+    <div class="section-label">03 — The Breakthrough</div>
+    <h2>The Swarm Architecture</h2>
+    <p>
+      The crowning achievement of V2. By utilizing Python's <code>asyncio.Task</code>, we gave Agen the ability to call the <code>invoke_subagent</code> tool.
+    </p>
+    <p>
+      The main agent can now spawn fully independent clones of itself to work on tasks in the background. It doesn't block the UI, and it doesn't poll. It operates purely on asynchronous event loops.
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h4>Agent Manager</h4>
+        <p>Oversees the swarm, delegating tasks and merging the results back into the main conversation.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <h4>Async Tasks</h4>
+        <p>Background workers that handle heavy workloads like semantic RAG chunking without freezing the terminal.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔌</span>
+        <h4>MCP Integration</h4>
+        <p>Dynamic tool loading through the Model Context Protocol, allowing subagents to spin up local servers.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="deployment">
+    <div class="section-label">04 — Deployment</div>
+    <h2>The PyInstaller Crucible</h2>
+    <p>
+      Packaging a massive AI stack (FastAPI, Langchain, Uvicorn, ChromaDB) into a single executable is notoriously difficult. But after navigating hidden imports and module hooks, we succeeded.
+    </p>
+    <div class="diagram-wrap">
+      <div class="diagram-title">🖥️ Terminal Log: agen.exe Build</div>
+      <code style="display:block; padding:1rem; background:rgba(0,0,0,0.5); color:var(--cream); line-height:1.8;">
+        > pyinstaller --name "agen" --onefile client/cli.py<br>
+        <span style="color:var(--mid-text);">INFO: Building PKG (CArchive) agen.pkg completed successfully.</span><br>
+        <span style="color:var(--mid-text);">INFO: Bootloader Windows-64bit-intel/run.exe</span><br>
+        <span style="color:var(--teal);">INFO: Build complete! The results are available in: dist/agen.exe</span>
+      </code>
+    </div>
+    <div class="pull-quote">
+      <p>60MB. One file. Zero dependencies required on the host machine.</p>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
