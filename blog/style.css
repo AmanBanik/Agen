@@ -257,3 +257,77 @@ code {
 .dl-btn.linux:hover { color: #fca311; border-color: #fca311; background: rgba(252,163,17,0.1); }
 .dl-btn.repo { background: var(--orange); color: var(--bg-color); border: none; }
 .dl-btn.repo:hover { background: var(--red-vivid); color: #fff; }
+
+/* ── MODAL ── */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 2.5rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  color: var(--mid-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.close-btn:hover { color: var(--red-vivid); }
+
+.modal-desc { margin-bottom: 1.5rem; color: var(--mid-text); }
+
+.code-container {
+  display: flex;
+  align-items: center;
+  background: #0b0c10;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  justify-content: space-between;
+}
+
+.code-container code {
+  background: transparent;
+  border: none;
+  color: var(--teal);
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  flex-grow: 1;
+  text-align: left;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--cream);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  transition: 0.2s;
+  min-width: 40px;
+}
+.copy-btn:hover { border-color: var(--orange); color: var(--orange); }
