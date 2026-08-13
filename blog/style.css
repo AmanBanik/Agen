@@ -215,3 +215,45 @@ code {
   font-size: 1.5rem;
   color: var(--cream);
 }
+
+/* ── DOWNLOAD SECTION ── */
+.download-section {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: -2rem auto 4rem;
+  max-width: 900px;
+  position: relative;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+
+.dl-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: var(--cream);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.dl-btn:hover {
+  border-color: var(--orange);
+  background: rgba(232, 87, 10, 0.1);
+  transform: translateY(-3px);
+  text-decoration: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.dl-btn svg { width: 24px; height: 24px; fill: currentColor; }
+.dl-btn.windows:hover { color: #00a4ef; border-color: #00a4ef; background: rgba(0,164,239,0.1); }
+.dl-btn.mac:hover { color: #ffffff; border-color: #ffffff; background: rgba(255,255,255,0.1); }
+.dl-btn.linux:hover { color: #fca311; border-color: #fca311; background: rgba(252,163,17,0.1); }
+.dl-btn.repo { background: var(--orange); color: var(--bg-color); border: none; }
+.dl-btn.repo:hover { background: var(--red-vivid); color: #fff; }
