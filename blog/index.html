@@ -5,44 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Agen V2 — Building a Swarm AI Architecture</title>
 <link rel="stylesheet" href="style.css">
-<style>
-  /* Extra styles for expanded code blocks and deep-dives */
-  .code-block {
-    background: #111216;
-    border: 1px solid var(--panel-border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    overflow-x: auto;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--text-main);
-    margin: 2rem 0;
-  }
-  .code-block .keyword { color: var(--orange); }
-  .code-block .string { color: var(--teal); }
-  .code-block .comment { color: var(--mid-text); font-style: italic; }
-  .code-block .func { color: var(--amber); }
-
-  .deep-dive {
-    border-left: 3px solid var(--teal);
-    background: rgba(77, 182, 172, 0.05);
-    padding: 1.5rem;
-    margin: 2rem 0;
-    border-radius: 0 8px 8px 0;
-  }
-</style>
 </head>
 <body>
 
 <header>
   <div class="header-bg"></div>
+  <div class="header-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" role="img" aria-label="Agen logo">
+      <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#90c888" />
+          <stop offset="50%" stop-color="#ffd700" />
+          <stop offset="100%" stop-color="#ff8c00" />
+        </linearGradient>
+        <style>
+          .ascii { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 16px; font-weight: bold; fill: url(#logoGradient); white-space: pre; }
+          .brand { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 14px; font-weight: bold; fill: #ffaa00; white-space: pre; }
+          .sub { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 14px; fill: #b0c4de; white-space: pre; }
+        </style>
+      </defs>
+      <text x="50%" y="20" text-anchor="middle" class="ascii">      ▄▄████▄▄      </text>
+      <text x="50%" y="38" text-anchor="middle" class="ascii">    ▄██████████▄    </text>
+      <text x="50%" y="56" text-anchor="middle" class="ascii">   ████▀▀  ▀▀████   </text>
+      <text x="50%" y="74" text-anchor="middle" class="ascii">  ████        ████  </text>
+      <text x="50%" y="92" text-anchor="middle" class="ascii"> ██████████████████ </text>
+      <text x="50%" y="110" text-anchor="middle" class="ascii">█████▀▀▀▀▀▀▀▀▀▀█████</text>
+      <text x="50%" y="128" text-anchor="middle" class="ascii">████            ████</text>
+      <text x="50%" y="146" text-anchor="middle" class="ascii">███              ███</text>
+      <text x="50%" y="170" text-anchor="middle">
+        <tspan class="brand">Agen v2.0</tspan>
+        <tspan class="sub">  - Autonomous AI Engineering CLI</tspan>
+      </text>
+    </svg>
+  </div>
   <div class="header-ticker">⚙️ BUILD_STATUS: SUCCESS</div>
   <h1>
     The <span class="highlight">Agen V2</span> Journey
   </h1>
   <p class="header-sub">
-    How we went from a fragile python script to a 60MB standalone executable running asynchronous AI subagents natively in the terminal.
+    A build log: how a fragile Python script that kept crashing on rate limits
+    turned into a 60MB standalone executable running asynchronous AI subagents
+    in the terminal.
   </p>
+  <p class="header-byline">Solo build log · Agen v2.0.0</p>
 </header>
 
 <div class="download-section">
@@ -59,7 +64,7 @@
     macOS
   </a>
   <a href="#" class="dl-btn linux" data-platform="linux">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9.5 2 7 5 7 11c0 2 .5 3 1 4-1.5.5-3 2-3 4 0 1 1 2 2 2h10c1 0 2-1 2-2 0-2-1.5-3.5-3-4 .5-1 1-2 1-4C17 5 14.5 2 12 2z"/><path d="M9 10a1 1 0 100-2 1 1 0 000 2z"/><path d="M15 10a1 1 0 100-2 1 1 0 000 2z"/><path d="M12 14c-1.5 0-2 1-2 1s.5 1 2 1 2-1 2-1-.5-1-2-1z"/></svg>
+    <svg viewBox="0 0 16 16"><path d="M8.996 4.497c.104-.076.1-.168.186-.158s.022.102-.098.207c-.12.104-.308.243-.46.323-.291.152-.631.336-.993.336s-.647-.167-.853-.33c-.102-.082-.186-.162-.248-.221-.11-.086-.096-.207-.052-.204.075.01.087.109.134.153.064.06.144.137.241.214.195.154.454.304.778.304s.702-.19.932-.32c.13-.073.297-.204.433-.304M7.34 3.781c.055-.02.123-.031.174-.003.011.006.024.021.02.034-.012.038-.074.032-.11.05-.032.017-.057.052-.093.054-.034 0-.086-.012-.09-.046-.007-.044.058-.072.1-.089m.581-.003c.05-.028.119-.018.173.003.041.017.106.045.1.09-.004.033-.057.046-.09.045-.036-.002-.062-.037-.093-.053-.036-.019-.098-.013-.11-.051-.004-.013.008-.028.02-.034"/><path fill-rule="evenodd" d="M8.446.019c2.521.003 2.38 2.66 2.364 4.093-.01.939.509 1.574 1.04 2.244.474.56 1.095 1.38 1.45 2.32.29.765.402 1.613.115 2.465a.8.8 0 0 1 .254.152l.001.002c.207.175.271.447.329.698.058.252.112.488.224.615.344.382.494.667.48.922-.015.254-.203.43-.435.57-.465.28-1.164.491-1.586 1.002-.443.527-.99.83-1.505.871a1.25 1.25 0 0 1-1.256-.716v-.001a1 1 0 0 1-.078-.21c-.67.038-1.252-.165-1.718-.128-.687.038-1.116.204-1.506.206-.151.331-.445.547-.808.63-.5.114-1.126 0-1.743-.324-.577-.306-1.31-.278-1.85-.39-.27-.057-.51-.157-.626-.384-.116-.226-.095-.538.07-.988.051-.16.012-.398-.026-.648a2.5 2.5 0 0 1-.037-.369c0-.133.022-.265.087-.386v-.002c.14-.266.368-.377.577-.451s.397-.125.53-.258c.143-.15.27-.374.443-.56q.036-.037.073-.07c-.081-.538.007-1.105.192-1.662.393-1.18 1.223-2.314 1.811-3.014.502-.713.65-1.287.701-2.016.042-.997-.705-3.974 2.112-4.2q.168-.015.321-.013m2.596 10.866-.03.016c-.223.121-.348.337-.427.656-.08.32-.107.733-.13 1.206v.001c-.023.37-.192.824-.31 1.267s-.176.862-.036 1.128v.002c.226.452.608.636 1.051.601s.947-.304 1.36-.795c.474-.576 1.218-.796 1.638-1.05.21-.126.324-.242.333-.4.009-.157-.097-.403-.425-.767-.17-.192-.217-.462-.274-.71-.056-.247-.122-.468-.26-.585l-.001-.001c-.18-.157-.356-.17-.565-.164q-.069.001-.14.005c-.239.275-.805.612-1.197.508-.359-.09-.562-.508-.587-.918m-7.204.03H3.83c-.189.002-.314.09-.44.225-.149.158-.276.382-.445.56v.002h-.002c-.183.184-.414.239-.61.31-.195.069-.353.143-.46.35v.002c-.085.155-.066.378-.029.624.038.245.096.507.018.746v.002l-.001.002c-.157.427-.155.678-.082.822.074.143.235.22.48.272.493.103 1.26.069 1.906.41.583.305 1.168.404 1.598.305.431-.098.712-.369.75-.867v-.002c.029-.292-.195-.673-.485-1.052-.29-.38-.633-.752-.795-1.09v-.002l-.61-1.11c-.21-.286-.43-.462-.68-.5a1 1 0 0 0-.106-.008M9.584 4.85c-.14.2-.386.37-.695.467-.147.048-.302.17-.495.28a1.3 1.3 0 0 1-.74.19.97.97 0 0 1-.582-.227c-.14-.113-.25-.237-.394-.322a3 3 0 0 1-.192-.126c-.063 1.179-.85 2.658-1.226 3.511a5.4 5.4 0 0 0-.43 1.917c-.68-.906-.184-2.066.081-2.568.297-.55.343-.701.27-.649-.266.436-.685 1.13-.848 1.844-.085.372-.1.749.01 1.097.11.349.345.67.766.931.573.351.963.703 1.193 1.015s.302.584.23.777a.4.4 0 0 1-.212.22.7.7 0 0 1-.307.056l.184.235c.094.124.186.249.266.375 1.179.805 2.567.496 3.568-.218.1-.342.197-.664.212-.903.024-.474.05-.896.136-1.245s.244-.634.53-.791a1 1 0 0 1 .138-.061q.005-.045.013-.087c.082-.546.569-.572 1.18-.303.588.266.81.499.71.814h.13c.122-.398-.133-.69-.822-1.025l-.137-.06a2.35 2.35 0 0 0-.012-1.113c-.188-.79-.704-1.49-1.098-1.838-.072-.003-.065.06.081.203.363.333 1.156 1.532.727 2.644a1.2 1.2 0 0 0-.342-.043c-.164-.907-.543-1.66-.735-2.014-.359-.668-.918-2.036-1.158-2.983M7.72 3.503a1 1 0 0 0-.312.053c-.268.093-.447.286-.559.391-.022.021-.05.04-.119.091s-.172.126-.321.238q-.198.151-.13.38c.046.15.192.325.459.476.166.098.28.23.41.334a1 1 0 0 0 .215.133.9.9 0 0 0 .298.066c.282.017.49-.068.673-.173s.34-.233.518-.29c.365-.115.627-.345.709-.564a.37.37 0 0 0-.01-.309c-.048-.096-.148-.187-.318-.257h-.001c-.354-.151-.507-.162-.705-.29-.321-.207-.587-.28-.807-.279m-.89-1.122h-.025a.4.4 0 0 0-.278.135.76.76 0 0 0-.191.334 1.2 1.2 0 0 0-.051.445v.001c.01.162.041.299.102.436.05.116.109.204.183.274l.089-.065.117-.09-.023-.018a.4.4 0 0 1-.11-.161.7.7 0 0 1-.054-.22v-.01a.7.7 0 0 1 .014-.234.4.4 0 0 1 .08-.179q.056-.069.126-.073h.013a.18.18 0 0 1 .123.05c.045.04.08.09.11.162a.7.7 0 0 1 .054.22v.01a.7.7 0 0 1-.002.17 1.1 1.1 0 0 1 .317-.143 1.3 1.3 0 0 0 .002-.194V3.23a1.2 1.2 0 0 0-.102-.437.8.8 0 0 0-.227-.31.4.4 0 0 0-.268-.102m1.95-.155a.63.63 0 0 0-.394.14.9.9 0 0 0-.287.376 1.2 1.2 0 0 0-.1.51v.015q0 .079.01.152c.114.027.278.074.406.138a1 1 0 0 1-.011-.172.8.8 0 0 1 .058-.278.5.5 0 0 1 .139-.2.26.26 0 0 1 .182-.069.26.26 0 0 1 .178.081c.055.054.094.12.124.21.029.086.042.17.04.27l-.002.012a.8.8 0 0 1-.057.277c-.024.059-.089.106-.122.145.046.016.09.03.146.052a5 5 0 0 1 .248.102 1.2 1.2 0 0 0 .244-.763 1.2 1.2 0 0 0-.11-.495.9.9 0 0 0-.294-.37.64.64 0 0 0-.39-.133z"/></svg>
     Linux
   </a>
 </div>
@@ -73,42 +78,69 @@
       <li><a href="#swarm">Swarm Architecture</a></li>
       <li><a href="#mcp">MCP & RAG</a></li>
       <li><a href="#packaging">Packaging</a></li>
+      <li><a href="#closing">Closing</a></li>
     </ul>
   </div>
 </nav>
 
 <main>
+  <!-- SECTION 0: INTRO -->
+  <section id="intro">
+    <div class="section-label">00 — Why I'm Writing This</div>
+    <h2>A Terminal Agent That Kept Falling Over</h2>
+    <p>
+      This is a build log, not a launch announcement. I started Agen as a
+      single Python script that let me talk to Gemini from my terminal and
+      have it run shell commands on my behalf. It worked, in the sense that
+      it occasionally did what I asked. Most of the time it either locked up
+      the terminal or got rate-limited into oblivion. This post walks through
+      what actually broke in that first version, what I changed to fix it,
+      and what I'm still not entirely happy with.
+    </p>
+  </section>
+
   <!-- SECTION 1: V1 LIMITS -->
   <section id="v1-limits">
     <div class="section-label">01 — The Catalyst</div>
     <h2>Where It All Began:<br>The Limits of V1</h2>
-    
+
     <p>
-      The initial prototype of Agen was a monolithic python script. It was powerful and proved that a terminal-based AI assistant was viable, but it was fundamentally flawed. It relied heavily on synchronous polling and brittle shell commands. When you asked the agent to parse a directory, it literally executed <code>cat</code> and <code>grep</code> commands in the background, waiting for standard output.
+      The first prototype of Agen was a single monolithic Python script. It
+      proved a terminal-based AI assistant was worth building, but it was
+      fundamentally fragile. It relied on synchronous polling and raw shell
+      commands — when I asked it to parse a directory, it would literally
+      shell out to <code>cat</code> and <code>grep</code> and sit there
+      blocking on the output.
     </p>
 
     <div class="pull-quote">
-      <p>We hit a wall. When you are bound by a 4-request-per-minute API limit, synchronous polling is a death sentence.</p>
+      <p>When you're bound by a 4-request-per-minute free-tier limit, synchronous polling is a death sentence.</p>
     </div>
 
     <p>
-      Using free-tier cloud models like Gemini imposes strict rate limits. Our V1 agent would enter a loop, repeatedly querying the API to check the status of a long-running terminal command. Within 60 seconds, the API would return a <code>429 Too Many Requests</code>, completely crashing the application. The blocking UI meant that while the agent was "thinking", the user was entirely locked out of the terminal.
+      I was running on Gemini's free tier, which meant strict rate limits.
+      V1 would enter a loop, repeatedly querying the API to check on a
+      long-running terminal command, and within a minute I'd get slammed
+      with a <code>429 Too Many Requests</code> that crashed the whole
+      session. Worse, the UI was fully blocking — while the agent was
+      "thinking," I couldn't type anything else into the terminal. I lost a
+      few evenings just watching it hang.
     </p>
-    
+
     <div class="diagram-wrap">
       <div class="diagram-title">📅 Project Evolution</div>
       <div class="timeline">
         <div class="timeline-item">
           <div class="tl-year">V1 Prototype</div>
-          <div class="tl-text">Basic CLI wrapper around Gemini. Very slow, blocking UI. Dependent on raw bash scripts for context.</div>
+          <div class="tl-text">A basic CLI wrapper around Gemini. Slow, blocking UI, dependent on raw bash scripts for context.</div>
         </div>
         <div class="timeline-item danger">
           <div class="tl-year">The API Bottleneck</div>
-          <div class="tl-text">Frequent crashes due to 429 Too Many Requests when polling for long tasks. Context windows overflowing with useless logs.</div>
+          <div class="tl-text">Frequent crashes from 429 errors while polling for long tasks. Context windows filling up with useless log output.</div>
         </div>
         <div class="timeline-item">
           <div class="tl-year">The V2 Rewrite</div>
-          <div class="tl-text">Transitioning to SSE (Server-Sent Events) streams, asynchronous Swarm architecture, and formal tool bindings.</div>
+          <div class="tl-text">Moved to SSE streams, an asynchronous swarm architecture, and formal tool bindings instead of raw shell calls.</div>
         </div>
       </div>
     </div>
@@ -119,16 +151,26 @@
     <div class="section-label">02 — The Logic</div>
     <h2>The ReAct Engine</h2>
     <p>
-      To fix the brittleness of V1, we tore down the basic chat loop and implemented a rigorous <strong>LangChain ReAct (Reason + Act)</strong> loop. The agent was no longer just generating a text response; it was <em>thinking</em> about the problem, creating a plan, and executing physical Python tools on the host machine.
+      To fix V1's brittleness, I tore down the basic chat loop and rebuilt it
+      around a <strong>LangChain ReAct (Reason + Act)</strong> loop. The
+      agent stopped just generating text and started reasoning about the
+      problem, forming a plan, and executing actual Python tools on my
+      machine instead of shelling out blindly.
     </p>
 
     <div class="deep-dive">
-      <h3 style="margin-top: 0; font-size: 1.3rem; border: none;">🧠 How ReAct Changes Everything</h3>
-      <p style="font-size: 1rem;">
-        Instead of asking the LLM to write code and hoping for the best, the ReAct loop forces the model to output a specific JSON schema indicating a <strong>Tool Call</strong>. The Python backend intercepts this, executes the native Python function (e.g., <code>read_file</code> or <code>search_web</code>), and feeds the exact result back into the prompt. The LLM then "Reasons" about the output before taking its next "Action".
+      <h3>🧠 How ReAct Changes Things</h3>
+      <p>
+        Instead of asking the LLM to write code and hoping for the best, the
+        ReAct loop forces the model to output a specific JSON schema
+        indicating a <strong>tool call</strong>. The Python backend
+        intercepts this, runs the matching native function (like
+        <code>read_file</code> or <code>search_web</code>), and feeds the
+        exact result back into the prompt. The model then reasons about that
+        output before deciding on its next action.
       </p>
     </div>
-    
+
     <div class="diagram-wrap">
       <div class="diagram-title">⚙️ ReAct Execution Pipeline</div>
       <div style="display:flex; align-items:center; gap:0.5rem; overflow-x:auto; padding-bottom:1rem;">
@@ -141,6 +183,17 @@
         <div class="pipe-block cream" style="min-width:140px; text-align:center;">Resolution<br><span style="font-size:0.65rem;">Writes fixed code</span></div>
       </div>
     </div>
+
+    <div class="friction-note">
+      <h3>⚠️ Where it got annoying</h3>
+      <p>
+        The ReAct loop is only as reliable as the model's ability to stick to
+        the JSON schema. Early on, Gemini would occasionally wrap its tool
+        call in explanatory prose, and my parser would choke on it. I ended
+        up writing defensive parsing around every tool-call response before
+        this felt trustworthy enough to build on.
+      </p>
+    </div>
   </section>
 
   <!-- SECTION 3: SWARM ARCHITECTURE -->
@@ -148,10 +201,17 @@
     <div class="section-label">03 — The Breakthrough</div>
     <h2>The Swarm Architecture</h2>
     <p>
-      The crowning achievement of V2 is the Multi-Agent Swarm. As projects grew larger, a single agent could not maintain the context of a frontend React component, a backend FastAPI server, and a PostgreSQL database simultaneously.
+      The part of V2 I'm most proud of is the multi-agent swarm. As projects
+      got bigger, a single agent couldn't hold the context of a frontend
+      component, a backend server, and a database schema all at once — it
+      would either forget earlier context or mix concerns across files.
     </p>
     <p>
-      By utilizing Python's <code>asyncio.Task</code>, we gave Agen the ability to call the <code>invoke_subagent</code> tool. The main Agent acts as a Manager. When it faces a complex task, it spawns a fully independent, asynchronous clone of itself, passes it a specific prompt, and sends it to the background.
+      Using Python's <code>asyncio.Task</code>, I gave Agen an
+      <code>invoke_subagent</code> tool. The main agent acts as a manager:
+      when it hits a complex task, it spawns an independent, asynchronous
+      clone of itself, hands it a specific instruction, and lets it run in
+      the background.
     </p>
 
     <div class="code-block">
@@ -166,25 +226,39 @@
     </div>
 
     <p>
-      Because these subagents operate entirely on asynchronous event loops, they don't block the UI, and they don't rely on while-loop polling. This elegant orchestration allows you to have one agent writing unit tests while another is actively monitoring the server logs—all seamlessly feeding data back to the Manager.
+      Because subagents run on the async event loop rather than a
+      while-loop poller, they don't block the UI. That's what makes it
+      possible to have one agent writing tests while another watches server
+      logs, both feeding results back to the manager.
     </p>
 
     <div class="card-grid">
       <div class="card">
         <span class="card-icon">🧠</span>
         <h4>Agent Manager</h4>
-        <p>Oversees the swarm, delegating tasks and merging the asynchronous results back into the main terminal conversation.</p>
+        <p>Oversees the swarm, delegating tasks and merging asynchronous results back into the main terminal conversation.</p>
       </div>
       <div class="card">
         <span class="card-icon">⚡</span>
         <h4>Async Tasks</h4>
-        <p>Background workers that handle heavy workloads like semantic RAG chunking or web scraping without freezing the terminal UI.</p>
+        <p>Background workers that handle heavy work like semantic RAG chunking or web scraping without freezing the terminal UI.</p>
       </div>
       <div class="card">
         <span class="card-icon">📡</span>
         <h4>SSE Streams</h4>
-        <p>Server-Sent Events ensure that even when 3 agents are running, API limits are respected by dynamically throttling token generation.</p>
+        <p>Server-Sent Events push tokens and tool events back to the client as they happen, instead of polling for status.</p>
       </div>
+    </div>
+
+    <div class="friction-note">
+      <h3>⚠️ Where it got annoying</h3>
+      <p>
+        Subagents sharing state through a message queue sounds clean until
+        two of them try to write to the same file at once. I don't have a
+        real locking mechanism yet — right now I just try to scope subagent
+        instructions narrowly enough that collisions are unlikely, which is
+        a workaround, not a fix. It's the part of the swarm I trust least.
+      </p>
     </div>
   </section>
 
@@ -193,16 +267,26 @@
     <div class="section-label">04 — Expanding the Brain</div>
     <h2>MCP & Semantic RAG</h2>
     <p>
-      A smart agent is useless if it can't see your code. In V1, we relied on crude string matching. In V2, we integrated a full <strong>Local ChromaDB</strong> vector database.
+      An agent that can't see your code isn't very useful. V1 relied on
+      crude string matching. In V2, I integrated a local
+      <strong>ChromaDB</strong> vector database instead.
     </p>
     <p>
-      By running the <code>/index</code> command, Agen recursively parses your entire directory, generates semantic embeddings using the local model, and stores them in ChromaDB. When you ask a question, the agent performs a similarity search, instantly retrieving the exact lines of code across hundreds of files without overflowing the LLM context window.
+      Running <code>/index</code> makes Agen recursively parse the current
+      directory, generate embeddings locally, and store them in ChromaDB.
+      When I ask a question, it runs a similarity search and pulls back the
+      exact relevant lines across hundreds of files, without trying to stuff
+      the whole codebase into the context window.
     </p>
 
     <div class="deep-dive">
-      <h3 style="margin-top: 0; font-size: 1.3rem; border: none;">🔌 The Model Context Protocol (MCP)</h3>
-      <p style="font-size: 1rem;">
-        Instead of hardcoding every possible tool (like a web scraper or a GitHub API client), we adopted the open-source MCP standard. Agen V2 can dynamically connect to external MCP servers. If the agent realizes it needs to search the web, it connects to a local Tavily MCP server, fetches the search schema, and executes the tool entirely on the fly.
+      <h3>🔌 The Model Context Protocol (MCP)</h3>
+      <p>
+        Rather than hardcoding every possible tool — a web scraper, a GitHub
+        client, and so on — I adopted the open MCP standard. Agen V2 can
+        connect to external MCP servers at runtime: if the agent decides it
+        needs to search the web, it connects to a local Tavily MCP server,
+        fetches the tool schema, and calls it on the fly.
       </p>
     </div>
   </section>
@@ -212,10 +296,17 @@
     <div class="section-label">05 — Deployment</div>
     <h2>The PyInstaller Crucible</h2>
     <p>
-      Writing the software was only half the battle. Packaging a massive modern AI stack—FastAPI, Langchain, Uvicorn, ChromaDB, Rich, and Prompt Toolkit—into a single, distributable Windows executable is notoriously difficult.
+      Writing the software was only half the work. Packaging a modern AI
+      stack — FastAPI, LangChain, Uvicorn, ChromaDB, Rich, and Prompt
+      Toolkit — into a single Windows executable turned out to be its own
+      project.
     </p>
     <p>
-      PyInstaller struggles with dynamic imports used by AI libraries. We had to manually trace hidden imports for <code>pylatexenc</code>, configure hook paths for <code>langchain-community</code>, and exclude unnecessary UI frameworks like Tkinter to keep the file size down.
+      PyInstaller struggles with the dynamic imports AI libraries love to
+      use. I had to manually trace hidden imports for
+      <code>pylatexenc</code>, add hook paths for
+      <code>langchain-community</code>, and explicitly exclude frameworks
+      like Tkinter to keep the binary size down.
     </p>
 
     <div class="diagram-wrap">
@@ -230,12 +321,47 @@
     </div>
 
     <div class="pull-quote">
-      <p>60MB. One single file. Zero dependencies required on the host machine.</p>
+      <p>60MB. One file. No Python installation required on the host machine.</p>
     </div>
 
     <p>
-      The result is a completely standalone <code>agen.exe</code> binary. A user can download this single file onto a fresh Windows machine that doesn't even have Python installed, double-click it, and instantly have access to a Swarm-capable autonomous AI engineer in their terminal.
+      The end result is a standalone <code>agen.exe</code>. You can drop it
+      onto a fresh Windows machine with no Python installed, double-click
+      it, and get a swarm-capable terminal agent running immediately. The
+      macOS and Linux paths still go through the installer script rather
+      than a packaged binary — that's next on the list.
     </p>
+
+    <div class="friction-note">
+      <h3>⚠️ Where it got annoying</h3>
+      <p>
+        The hidden-import chase took longer than writing the swarm code did.
+        There's no clean way to know which import PyInstaller missed until
+        the packaged binary crashes on a machine that isn't yours — the
+        feedback loop is slow and mostly guesswork.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 6: CLOSING -->
+  <section id="closing">
+    <div class="section-label">06 — Where This Leaves Things</div>
+    <h2>What's Still Rough</h2>
+    <div class="closing-box">
+      <p>
+        V2 fixed the problems that made V1 unusable — the blocking UI, the
+        rate-limit crashes, the reliance on raw shell commands. But it's not
+        a finished project. The swarm has no real conflict resolution when
+        subagents touch the same files, the macOS/Linux build is a script
+        rather than a binary, and the ReAct parser is still more defensive
+        than I'd like.
+      </p>
+      <p>
+        If any of this is useful to you, the repo is linked above and open
+        to issues and PRs. If you build something on top of it or hit a wall
+        I didn't mention here, I'd genuinely like to hear about it.
+      </p>
+    </div>
   </section>
 </main>
 
@@ -253,40 +379,6 @@
   </div>
 </div>
 
-<script>
-  const modal = document.getElementById("installModal");
-  const closeBtn = document.querySelector(".close-btn");
-  const copyBtn = document.getElementById("copyBtn");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalCmd = document.getElementById("modalCmd");
-
-  const cmds = {
-    win: { title: "Install on Windows", cmd: "irm https://raw.githubusercontent.com/AmanBanik/Agen/v2-stable/setup.bat | iex" },
-    mac: { title: "Install on macOS", cmd: "curl -sSL https://raw.githubusercontent.com/AmanBanik/Agen/v2-stable/install.sh | bash" },
-    linux: { title: "Install on Linux", cmd: "curl -sSL https://raw.githubusercontent.com/AmanBanik/Agen/v2-stable/install.sh | bash" }
-  };
-
-  document.querySelectorAll('.dl-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const platform = btn.dataset.platform;
-      if (platform) {
-        e.preventDefault();
-        modalTitle.innerText = cmds[platform].title;
-        modalCmd.innerText = cmds[platform].cmd;
-        modal.style.display = "flex";
-        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
-      }
-    });
-  });
-
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; }
-
-  copyBtn.onclick = () => {
-    navigator.clipboard.writeText(modalCmd.innerText);
-    copyBtn.innerText = "Copied!";
-  }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
