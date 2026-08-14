@@ -7,8 +7,11 @@ on:
     branches: [ "main", "v2-stable" ]
 
 jobs:
-  build:
-    runs-on: windows-latest
+  test-and-build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout repository
@@ -27,9 +30,9 @@ jobs:
 
     - name: Run Smoke Test
       run: |
-        # Simply verifying the modules can be imported without crashing
         python -c "import backend.agent; import backend.swarm; import client.cli; print('Smoke test passed!')"
 
-    - name: Build Executable
+    - name: Build Executable (Windows Only)
+      if: matrix.os == 'windows-latest'
       run: |
         .\build_exe.bat
