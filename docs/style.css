@@ -110,6 +110,10 @@ nav {
   border-bottom: 1px solid var(--panel-border);
   z-index: 100;
   padding: 1rem 0;
+  transition: transform 0.3s ease;
+}
+.nav-hidden {
+  transform: translateY(-100%);
 }
 
 .nav-inner {

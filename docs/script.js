@@ -35,4 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
     copyBtn.textContent = 'Copied!';
     setTimeout(() => { copyBtn.innerHTML = copyIcon; }, 1500);
   });
+
+  // Smart sticky navbar logic
+  let lastScrollY = window.scrollY;
+  const nav = document.querySelector('nav');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > lastScrollY && window.scrollY > 150) {
+      // Scrolling down and past the header
+      nav.classList.add('nav-hidden');
+    } else {
+      // Scrolling up
+      nav.classList.remove('nav-hidden');
+    }
+    lastScrollY = window.scrollY;
+  }, { passive: true });
 });
