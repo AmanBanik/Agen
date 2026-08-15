@@ -98,7 +98,8 @@
       <li><a href="#swarm">Swarm Architecture</a></li>
       <li><a href="#mcp">MCP & RAG</a></li>
       <li><a href="#packaging">Packaging</a></li>
-      <li><a href="#closing">Closing</a></li>
+      <li><a href="#contributing">Contributing</a></li>
+      <li><a href="#summary">Closing</a></li>
     </ul>
   </div>
 </nav>
@@ -363,27 +364,70 @@
     </div>
   </section>
 
-  <!-- SECTION 6: CLOSING -->
-  <section id="closing">
-    <div class="section-label">06 — Where This Leaves Things</div>
-    <h2>What's Still Rough</h2>
-    <div class="closing-box">
-      <p>
-        V2 fixed the problems that made V1 unusable — the blocking UI, the
-        rate-limit crashes, the reliance on raw shell commands. But it's not
-        a finished project. The swarm has no real conflict resolution when
-        subagents touch the same files, the macOS/Linux build is a script
-        rather than a binary, and the ReAct parser is still more defensive
-        than I'd like.
-      </p>
-      <p>
-        If any of this is useful to you, the repo is linked above and open
-        to issues and PRs. If you build something on top of it or hit a wall
-        I didn't mention here, I'd genuinely like to hear about it.
-      </p>
+  <!-- SECTION 6: CONTRIBUTING -->
+  <section id="contributing">
+    <div class="section-label">06 — Open Source</div>
+    <h2>Join the Swarm:<br>Contributing to V2 & V3</h2>
+    <p>
+      Agen isn't a walled garden. It's an open experiment in making terminal agents actually useful, and I'd love for you to get your hands dirty with the codebase. Whether you're squashing bugs in documentation, building out new features, or just testing the absolute limits of the system — there's a place for you here.
+    </p>
+    <p>
+      <strong>Our current prime directive?</strong> Battle-testing V2 across every platform we can find. If you have a weird Linux distro or an M-series Mac, I want to know exactly how spectacularly it breaks (or succeeds) so we can bulletproof the installation scripts. 
+    </p>
+    <div class="card-grid reveal">
+      <div class="card">
+        <span class="card-icon">🧪</span>
+        <h4>Platform Testing</h4>
+        <p>Run V2 on macOS, Linux, and Windows edge cases. Find the friction points and help smooth out the installation scripts.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🛠️</span>
+        <h4>Feature Engineering</h4>
+        <p>Have an idea for a new MCP tool? A better way to resolve file conflicts between subagents? Fork it, build it, and open a PR.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🚀</span>
+        <h4>The V3 Roadmap</h4>
+        <p>V2 was about stability. V3 is about scale. Jump into the discussions, share your wildest ideas, and help architect the next generation of the swarm.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: SUMMARY -->
+  <section id="summary" style="margin-top:5rem;">
+    <div class="section-label">07 — Summary</div>
+    <h2>The Bottom Line</h2>
+    <p>
+      Terminal agents are no longer just a gimmick — they are the next evolution of developer velocity. V2 fixed the problems that made V1 unusable — the blocking UI, the rate-limit crashes, and the reliance on raw shell commands. But it's not a finished corporate product. The swarm still needs conflict resolution when subagents fight over files, and the ReAct parser is still more defensive than I'd like.
+    </p>
+    <p>
+      If any of this is useful to you, the repo is open for issues and PRs. If you build something amazing on top of it, or if you hit a wall I didn't mention here, I'd genuinely like to hear about it.
+    </p>
+    <p style="margin-top: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
+      <span style="color: var(--mid-text);">Reach out to discuss new ideas for V3:</span> <br>
+      <a href="mailto:amanbaniksr75@gmail.com" style="color: var(--teal); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--teal);">aman@mail.com</a>
+    </p>
+
+    <div class="pull-quote reveal">
+      <p>The code is out there. The question is whether you're ready to start delegating to the swarm.</p>
+    </div>
+
+    <div class="stat-strip reveal" style="margin-top:2rem;">
+      <div class="stat-cell"><span class="num">V2</span><span class="label-s">Current Stable</span></div>
+      <div class="stat-cell"><span class="num">Swarm</span><span class="label-s">Async Arch</span></div>
+      <div class="stat-cell"><span class="num">60MB</span><span class="label-s">Single Binary</span></div>
+      <div class="stat-cell"><span class="num">Open</span><span class="label-s">For PRs</span></div>
     </div>
   </section>
 </main>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">AGEN - TERMINAL SWARM</span>
+  <p class="footer-note">This project is an open-source experiment. All code is provided as-is under the MIT License.</p>
+  <p class="footer-version">AUTONOMOUS AI CLI V2.0</p>
+  <p class="footer-credits">&copy; 2026 | Curated with Compute by <a href="https://github.com/AmanBanik" target="_blank">AmanBanik</a></p>
+</footer>
 
 <div id="installModal" class="modal">
   <div class="modal-content">
