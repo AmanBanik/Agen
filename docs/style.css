@@ -415,8 +415,20 @@ code {
   section h2 { font-size: 2rem; }
   section p { font-size: 1rem; }
   main { padding: 3rem 1.25rem; }
-  .nav-inner { flex-direction: column; justify-content: center; padding: 1rem; }
-  .nav-links { gap: 1rem; justify-content: center; }
+  .nav-inner { flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
+  .nav-links { 
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 0;
+  }
+  .nav-links li {
+    flex: 0 0 33.333%;
+    text-align: center;
+  }
+  .nav-links a { font-size: 0.75rem; }
   .pull-quote { font-size: 1.2rem; margin: 2rem 0; padding-left: 1rem; }
   
   .download-section {
