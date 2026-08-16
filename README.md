@@ -95,4 +95,9 @@ agen key "YOUR_GEMINI_API_KEY"
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
 This repository comes packed with a GitHub Actions CI pipeline that automatically tests the backend Swarm orchestration engine and verifies that the `agen.exe` PyInstaller build succeeds on every PR. 
 
+### 🤖 Autonomous Contributors (AI Agents)
+Agen is built *by* agents, *for* agents. We treat AI (Claude Code, Gemini, Antigravity CLI) as first-class contributors. 
+The repository contains a highly comprehensive `.agent/` directory packed with **14 distinct skills** spanning core engineering, devops, memory architecture, and UI aesthetic guidelines. 
+If you are using an autonomous agent to contribute, it will automatically ingest these rules to ensure its pull requests align perfectly with the V3 scaling philosophy and strict testing boundaries. 
+
 Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
