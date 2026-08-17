@@ -2,6 +2,8 @@ import os
 import subprocess
 import asyncio
 from pathlib import Path
+from rich.console import Console
+from rich.prompt import Confirm
 from langchain_core.tools import tool
 from pydantic import BaseModel, Field
 from backend.mcp_registry import get_server_info
@@ -11,13 +13,33 @@ from backend.swarm import swarm
 
 # Security Boundary: Restrict the agent to the directory where Agen was launched
 WORKSPACE_DIR = os.path.abspath(os.getcwd())
+GRANTED_PATHS = set()
+console = Console()
 
 def _validate_path(path: str) -> str:
-    """Ensures the requested path is within the allowed workspace directory."""
+    """Ensures the requested path is within the allowed workspace directory or manually granted."""
     requested_path = os.path.abspath(path)
-    if not requested_path.startswith(WORKSPACE_DIR):
-        raise PermissionError(f"Access Denied: Path '{path}' is outside the allowed workspace ({WORKSPACE_DIR}).")
-    return requested_path
+    
+    if requested_path.startswith(WORKSPACE_DIR):
+        return requested_path
+        
+    for granted in GRANTED_PATHS:
+        if requested_path.startswith(granted):
+            return requested_path
+            
+    console.print(f"\n[bold orange3]⚠️ SECURITY ALERT:[/bold orange3] Agent is attempting to access a path outside the workspace:")
+    console.print(f"[cyan]{requested_path}[/cyan]")
+    
+    try:
+        allowed = Confirm.ask(f"Grant access to this path?")
+    except Exception:
+        allowed = False
+
+    if allowed:
+        GRANTED_PATHS.add(requested_path)
+        return requested_path
+    else:
+        raise PermissionError(f"Access Denied by User: Path '{path}' is outside the allowed workspace ({WORKSPACE_DIR}).")
 
 @tool
 def read_file_tool(path: str) -> str:
