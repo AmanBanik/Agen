@@ -21,3 +21,4 @@ All new scripts must be `async` compatible. Synchronous code bottlenecks the eve
 3. **Cross-Platform Compatibility:** Always use Python's `pathlib` for file paths. Do not assume `/` or `\` path separators.
    - *Good:* `Path(base_dir) / "config.json"`
 4. **Rate Limits & Backoff:** When hitting external APIs, implement exponential backoff.
+5. **Workspace Boundary Enforcement:** All agentic file operations (`read_file`, `write_file`, `list_dir`) must strictly enforce a workspace directory boundary (`os.getcwd()`). Any attempt by the LLM to access files outside this boundary must trigger a manual user permission prompt (via `rich.prompt.Confirm`) and raise a `PermissionError` if denied.

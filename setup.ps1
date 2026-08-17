@@ -20,7 +20,7 @@ if (-not (Test-Path -Path $targetDir)) {
     New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
 }
 
-Write-Host ">>> Fetching standalone executable from GitHub Releases (~60MB)..." -ForegroundColor Yellow
+Write-Host ">>> Fetching standalone executable from GitHub Releases (~170MB)..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri $downloadUrl -OutFile $exePath -UseBasicParsing
 
 Write-Host ">>> Binary secured." -ForegroundColor Green
