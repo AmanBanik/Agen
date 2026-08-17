@@ -3,9 +3,9 @@ from cx_Freeze import setup, Executable
 
 # Dependencies are automatically detected, but some modules need help.
 build_exe_options = {
-    "packages": ["os", "typer", "rich", "fastapi", "uvicorn", "langchain", "httpx"],
+    "packages": ["os", "typer", "rich", "fastapi", "uvicorn", "langchain", "httpx", "langchain_google_genai", "mcp"],
     "excludes": ["tkinter", "test"],
-    "include_files": ["backend/", "client/", "README.md", "pyproject.toml"]
+    "include_files": ["backend/", "client/", "README.md", "pyproject.toml", ".agent/"]
 }
 
 setup(
