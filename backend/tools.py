@@ -18,6 +18,26 @@ def read_file_tool(path: str) -> str:
         return f"Error reading file: {str(e)}"
 
 @tool
+def list_dir_tool(path: str) -> str:
+    """Lists the contents of a directory on the disk (Workspace Access)."""
+    try:
+        if not os.path.isdir(path):
+            return f"Error: {path} is not a valid directory."
+        
+        items = os.listdir(path)
+        if not items:
+            return f"Directory {path} is empty."
+            
+        result = [f"Contents of {os.path.abspath(path)}:"]
+        for item in items:
+            item_path = os.path.join(path, item)
+            item_type = "DIR" if os.path.isdir(item_path) else "FILE"
+            result.append(f"[{item_type}] {item}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error listing directory: {str(e)}"
+
+@tool
 def write_file_tool(path: str, content: str) -> str:
     """Writes content to a file on the disk (overwrites if exists)."""
     try:
@@ -135,4 +155,4 @@ def check_messages(agent_id: str) -> str:
         return "No new messages."
     return "New Messages:\n" + "\n".join(msgs)
 
-GET_ALL_TOOLS = [read_file_tool, write_file_tool, execute_shell_tool, execute_mcp_tool, invoke_subagent, send_message, check_messages]
+GET_ALL_TOOLS = [read_file_tool, list_dir_tool, write_file_tool, execute_shell_tool, execute_mcp_tool, invoke_subagent, send_message, check_messages]
