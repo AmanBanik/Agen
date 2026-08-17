@@ -1,6 +1,7 @@
 import os
 import subprocess
 import asyncio
+from pathlib import Path
 from langchain_core.tools import tool
 from pydantic import BaseModel, Field
 from backend.mcp_registry import get_server_info
@@ -8,11 +9,22 @@ from mcp.client.stdio import stdio_client, StdioServerParameters
 from mcp.client.session import ClientSession
 from backend.swarm import swarm
 
+# Security Boundary: Restrict the agent to the directory where Agen was launched
+WORKSPACE_DIR = os.path.abspath(os.getcwd())
+
+def _validate_path(path: str) -> str:
+    """Ensures the requested path is within the allowed workspace directory."""
+    requested_path = os.path.abspath(path)
+    if not requested_path.startswith(WORKSPACE_DIR):
+        raise PermissionError(f"Access Denied: Path '{path}' is outside the allowed workspace ({WORKSPACE_DIR}).")
+    return requested_path
+
 @tool
 def read_file_tool(path: str) -> str:
     """Reads the contents of a file on the disk."""
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        safe_path = _validate_path(path)
+        with open(safe_path, 'r', encoding='utf-8') as f:
             return f.read()
     except Exception as e:
         return f"Error reading file: {str(e)}"
@@ -21,16 +33,17 @@ def read_file_tool(path: str) -> str:
 def list_dir_tool(path: str) -> str:
     """Lists the contents of a directory on the disk (Workspace Access)."""
     try:
-        if not os.path.isdir(path):
-            return f"Error: {path} is not a valid directory."
+        safe_path = _validate_path(path)
+        if not os.path.isdir(safe_path):
+            return f"Error: {safe_path} is not a valid directory."
         
-        items = os.listdir(path)
+        items = os.listdir(safe_path)
         if not items:
-            return f"Directory {path} is empty."
+            return f"Directory {safe_path} is empty."
             
-        result = [f"Contents of {os.path.abspath(path)}:"]
+        result = [f"Contents of {safe_path}:"]
         for item in items:
-            item_path = os.path.join(path, item)
+            item_path = os.path.join(safe_path, item)
             item_type = "DIR" if os.path.isdir(item_path) else "FILE"
             result.append(f"[{item_type}] {item}")
         return "\n".join(result)
@@ -41,10 +54,11 @@ def list_dir_tool(path: str) -> str:
 def write_file_tool(path: str, content: str) -> str:
     """Writes content to a file on the disk (overwrites if exists)."""
     try:
-        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
+        safe_path = _validate_path(path)
+        os.makedirs(os.path.dirname(safe_path), exist_ok=True)
+        with open(safe_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        return f"Successfully wrote to {path}"
+        return f"Successfully wrote to {safe_path}"
     except Exception as e:
         return f"Error writing file: {str(e)}"
 
