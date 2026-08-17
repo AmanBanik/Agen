@@ -31,7 +31,7 @@ def test_validate_path_outside_workspace_granted(mock_confirm):
 
 def test_list_dir_tool_safe():
     """Ensure the list_dir_tool correctly lists the workspace boundary."""
-    result = list_dir_tool(WORKSPACE_DIR)
+    result = list_dir_tool.invoke({"path": WORKSPACE_DIR})
     assert "Contents of" in result
     # We expect standard repository folders to be listed
     assert "backend" in result or "client" in result or "README.md" in result
