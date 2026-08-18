@@ -76,6 +76,11 @@ Simply type `agen` (or run `agen.exe`) in your terminal to boot up the interacti
 * `/skill pull <github_url>` - Clone a community AI workflow skill into your local `.agent_skills` directory.
 * `/ollama` - Switch the agent to use local hardware via Ollama.
 * `/gemini` - Switch the agent to use cloud APIs.
+* `/model <name>` - Override the active model (e.g., `/model gemini-1.5-pro` or `/model llama3`).
+* `/skills` - View all autonomous governance protocols currently loaded into the Swarm.
+* `/tools` - View all active native ReAct and MCP tools available to the agent.
+* `/swarm` - Display a live telemetry table of all active background async subagents.
+* `/tokens` - Check your session's token telemetry.
 * `/clear` - Clear the terminal interface.
 * `/exit` - Quit the CLI.
 
