@@ -10,7 +10,7 @@ def test_agen_completer_commands():
     doc = Document("/he", cursor_position=3)
     completions = list(completer.get_completions(doc, None))
     assert len(completions) > 0
-    assert any(c.text == "lp" for c in completions) # completes to /help
+    assert any(c.text == "/help" for c in completions) # completes to /help
     
     # Test 2: Second word completion (should NOT yield slash commands)
     doc = Document("/model gemi", cursor_position=11)

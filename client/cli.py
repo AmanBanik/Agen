@@ -18,6 +18,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.text import Text
 from rich.live import Live
+from rich.table import Table
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import Completer, Completion, PathCompleter, WordCompleter
 from prompt_toolkit.formatted_text import HTML
@@ -92,17 +93,19 @@ def print_gradient_logo():
 class AgenCompleter(Completer):
     def __init__(self):
         self.path_completer = PathCompleter()
-        self.word_completer = WordCompleter(['/help', '/exit', '/clear', '/index', '/skill', '/ollama', '/gemini'], ignore_case=True)
+        self.commands = ['/help', '/exit', '/clear', '/index', '/skill', '/ollama', '/gemini', '/model', '/tokens', '/swarm', '/tools', '/skills']
         
     def get_completions(self, document, complete_event):
         text = document.text_before_cursor
-        
-        if text.startswith('/'):
-            for c in self.word_completer.get_completions(document, complete_event):
-                yield c
-                
-        # File completion for @ symbol
         words = text.split(' ')
+        
+        # Only autocomplete commands if we are typing the FIRST word
+        if len(words) == 1 and text.startswith('/'):
+            for cmd in self.commands:
+                if cmd.startswith(text):
+                    yield Completion(cmd, start_position=-len(text))
+                
+        # File completion for @ symbol anywhere in the string
         last_word = words[-1] if words else ''
         if last_word.startswith('@'):
             # create a pseudo document for path completion
@@ -113,10 +116,11 @@ class AgenCompleter(Completer):
 
 # Global provider state
 current_provider = "gemini"
+current_model = None
 
 @app.callback(invoke_without_command=True)
 def main_callback(ctx: typer.Context):
-    global current_provider
+    global current_provider, current_model
     if ctx.invoked_subcommand is None:
         print_gradient_logo()
         console.print("[dim]Welcome to Agen V2 Interactive Mode! Type '/help' for commands, '@' for file completion, or '/exit' to quit.[/dim]\n")
@@ -143,6 +147,11 @@ def main_callback(ctx: typer.Context):
                         "[bold cyan]/exit[/bold cyan]   - Quit the CLI\n"
                         "[bold cyan]/ollama[/bold cyan] - Switch to Local Ollama Mode (e.g. Llama3/Gemma)\n"
                         "[bold cyan]/gemini[/bold cyan] - Switch to Google Gemini Cloud Mode\n"
+                        "[bold cyan]/model[/bold cyan]  - Swap specific model (e.g., /model gemini-1.5-pro)\n"
+                        "[bold cyan]/tokens[/bold cyan] - Show session token telemetry\n"
+                        "[bold cyan]/swarm[/bold cyan]  - Display active async subagents\n"
+                        "[bold cyan]/tools[/bold cyan]  - List active MCP and Native tools\n"
+                        "[bold cyan]/skills[/bold cyan] - View loaded autonomous engineering standards\n"
                         "[bold cyan]/skill[/bold cyan]  - Pull a community skill (usage: /skill pull <url>)\n\n"
                         "Shortcuts:\n"
                         "[bold magenta]@[/bold magenta]       - Type @ to autocomplete and attach local files/folders\n",
@@ -167,7 +176,72 @@ def main_callback(ctx: typer.Context):
                     continue
                 elif cmd.lower() == "/gemini":
                     current_provider = "gemini"
+                    current_model = None
                     console.print("[bold green]Switched to Google Gemini Provider![/bold green]")
+                    continue
+                elif cmd.lower().startswith("/model"):
+                    args = cmd.split()
+                    if len(args) > 1:
+                        current_model = args[1]
+                        console.print(f"[bold green]Switched specific model to:[/bold green] {current_model}")
+                    else:
+                        console.print("[red]Usage: /model <model_name>[/red]")
+                    continue
+                elif cmd.lower() == "/skills":
+                    table = Table(title="Loaded Autonomous Skills", border_style="cyan")
+                    table.add_column("Skill Path", style="dim")
+                    table.add_column("Type")
+                    
+                    for base_dir, stype in [(".agent/skills", "Core Standards"), (".agent_skills", "Community Skill")]:
+                        full_path = os.path.join(os.path.dirname(__file__), "..", base_dir)
+                        if os.path.exists(full_path):
+                            for root, dirs, files in os.walk(full_path):
+                                for f in files:
+                                    if f.endswith(".md"):
+                                        rel_path = os.path.relpath(os.path.join(root, f), os.path.dirname(__file__) + "/..")
+                                        table.add_row(rel_path, stype)
+                    console.print(table)
+                    continue
+                elif cmd.lower() == "/tools":
+                    table = Table(title="Active MCP & Native Tools", border_style="magenta")
+                    table.add_column("Tool Name", style="bold cyan")
+                    table.add_column("Source", style="dim")
+                    table.add_row("read_file", "Native (ReAct)")
+                    table.add_row("write_file", "Native (ReAct)")
+                    table.add_row("list_dir", "Native (ReAct)")
+                    table.add_row("execute_shell", "Native (ReAct)")
+                    table.add_row("read_browser_page", "Native (ReAct)")
+                    table.add_row("invoke_subagent", "Native (Swarm)")
+                    table.add_row("search_web", "MCP (Tavily)")
+                    table.add_row("github_*", "MCP (GitHub)")
+                    console.print(table)
+                    continue
+                elif cmd.lower() == "/swarm":
+                    table = Table(title="Asynchronous Swarm Fleet", border_style="yellow")
+                    table.add_column("Task ID", style="bold yellow")
+                    table.add_column("Status", style="green")
+                    
+                    try:
+                        response = httpx.get("http://localhost:8000/swarm_status", timeout=2.0)
+                        if response.status_code == 200:
+                            tasks = response.json().get("active_tasks", [])
+                            if not tasks:
+                                table.add_row("No active subagents.", "-")
+                            else:
+                                for t in tasks:
+                                    table.add_row(str(t), "Running")
+                        else:
+                            table.add_row("Backend unreachable", "Error")
+                    except Exception:
+                        table.add_row("Backend unreachable", "Error")
+                        
+                    console.print(table)
+                    continue
+                elif cmd.lower() == "/tokens":
+                    console.print(Panel(
+                        "Token usage tracking is enabled via LangChain callbacks.\nCheck backend console for exact counts.", 
+                        title="📊 [bold blue]Token Telemetry[/bold blue]", border_style="blue"
+                    ))
                     continue
                     
                 if cmd:
@@ -216,7 +290,8 @@ def chat(prompt: str):
         "prompt": prompt, 
         "system_context": "You are a highly capable autonomous AI Engineering CLI assistant. You can write, read, and execute files/commands to solve problems.", 
         "task_type": "tough",
-        "provider": current_provider
+        "provider": current_provider,
+        "model": current_model
     }
     
     current_text = ""
