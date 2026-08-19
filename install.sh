@@ -12,6 +12,16 @@ echo -e "\033[0;31m███              ███\033[0m\n"
 
 echo -e "\033[1;36mInitializing Agen V2 Autonomous Swarm Setup (macOS/Linux)...\033[0m\n"
 
+if ! command -v git &> /dev/null; then
+    echo -e "\033[1;31m[ERROR] git could not be found. Please install git.\033[0m"
+    exit 1
+fi
+
+if ! command -v python3 &> /dev/null; then
+    echo -e "\033[1;31m[ERROR] python3 could not be found. Please install Python 3.10+.\033[0m"
+    exit 1
+fi
+
 TARGET_DIR="$HOME/.agen-src"
 BIN_DIR="$HOME/.local/bin"
 REPO_URL="https://github.com/AmanBanik/Agen.git"

@@ -58,6 +58,13 @@ async def index_repo_endpoint(req: IndexRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
+from backend.swarm import swarm
+
+@app.get("/swarm_status")
+async def swarm_status_endpoint():
+    active_tasks = [a_id for a_id, task in swarm.active_agents.items() if not task.done()]
+    return {"active_tasks": active_tasks}
+
 @app.post("/stream_chat")
 async def stream_chat_endpoint(req: ChatRequest):
     """V2 SSE Streaming endpoint"""
