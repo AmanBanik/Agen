@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" width="100%" height="180">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#90c888" />
+      <stop offset="50%" stop-color="#ffd700" />
+      <stop offset="100%" stop-color="#ff8c00" />
+    </linearGradient>
+    <style>
+      .ascii {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        font-weight: bold;
+        fill: url(#gradient);
+        white-space: pre;
+      }
+      .brand {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        font-weight: bold;
+        fill: #ffaa00;
+        white-space: pre;
+      }
+      .sub {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        fill: #b0c4de;
+        white-space: pre;
+      }
+    </style>
+  </defs>
+  
+  <text x="50%" y="20" text-anchor="middle" class="ascii">      ▄▄████▄▄      </text>
+  <text x="50%" y="38" text-anchor="middle" class="ascii">    ▄██████████▄    </text>
+  <text x="50%" y="56" text-anchor="middle" class="ascii">   ████▀▀  ▀▀████   </text>
+  <text x="50%" y="74" text-anchor="middle" class="ascii">  ████        ████  </text>
+  <text x="50%" y="92" text-anchor="middle" class="ascii"> ██████████████████ </text>
+  <text x="50%" y="110" text-anchor="middle" class="ascii">█████▀▀▀▀▀▀▀▀▀▀█████</text>
+  <text x="50%" y="128" text-anchor="middle" class="ascii">████            ████</text>
+  <text x="50%" y="146" text-anchor="middle" class="ascii">███              ███</text>
+  
+  <text x="50%" y="170" text-anchor="middle">
+    <tspan class="brand">Agen 2++</tspan>
+    <tspan class="sub">  - Autonomous AI Engineering CLI</tspan>
+  </text>
+</svg>

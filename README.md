@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="logo.svg" alt="Agen V2 Logo" width="400" />
+<img src="logo.svg" alt="Agen 2++ Logo" width="400" />
 
 # 🚀 Agen V2.5 (Pre-Release)
 **Next pre release to be populated soon.**
